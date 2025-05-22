@@ -14,6 +14,7 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 
 // implementing respository pattern
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
 
 var app = builder.Build();
 
