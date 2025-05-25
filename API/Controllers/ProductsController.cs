@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Specification;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,12 @@ public class ProductsController(IGenericRepository<Product> repo) : ControllerBa
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
     {
-        //currently no filtering, will implement later on.
-        return Ok(await repo.ListAllAsync());
+        //create spec(expression/criteria) using product specification
+        var spec = new ProductSpecification(brand, type,sort);
+
+        var product = await repo.ListAsync(spec);
+        
+        return Ok(product);
     }
 
     [HttpGet("{id:int}")]
